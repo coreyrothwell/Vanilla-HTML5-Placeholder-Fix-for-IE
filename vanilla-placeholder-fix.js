@@ -3,22 +3,41 @@
 **	By Corey Rothwell 
 */
 (function(){
-	var inputs = document.getElementsByTagName('input');
-	for(i=0;i<inputs.length;i++){
-		var itemer = inputs[i],
-		holder = itemer.getAttribute('placeholder');
-		if( holder ) {
-			itemer.value = holder;
+
+	// on focus and blur event handlers
+	function i_focus(){
+		if(this.value === this.getAttribute('placeholder') ){
+			this.value = '';
 		}
-		itemer.onfocus = function(){
-			if(this.value === this.getAttribute('placeholder') ){
-				this.value = '';
-			}
-		};
-		itemer.onblur = function(){
-			if(this.value === ''){
-				this.value = this.getAttribute('placeholder');
-			}
-		};
 	}
-})();
+	function i_blur(){
+		if(this.value === ''){
+			this.value = this.getAttribute('placeholder');
+		}
+	}
+
+	// test if placeholder is available, if not, fix it!
+	var tester = document.createElement('input');
+	if(!('placeholder' in tester)) {
+
+		// get all inputs and loops through them
+		var inputs = document.getElementsByTagName('input'),
+			i,
+			input_length = inputs.length;
+
+		for(i=0; i<input_length; i+=1){
+			var itemer = inputs[i],
+				holder = itemer.getAttribute('placeholder');
+
+			// put placeholder value in 'value'	
+			if( holder ) {
+				itemer.value = holder;
+			}
+
+			// attach events on focus and blur
+			itemer.onfocus = i_focus;
+			itemer.onblur = i_blur;
+		}
+	}
+
+}());
